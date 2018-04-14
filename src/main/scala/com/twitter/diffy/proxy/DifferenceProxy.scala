@@ -6,6 +6,7 @@ import com.twitter.diffy.analysis._
 import com.twitter.diffy.lifter.Message
 import com.twitter.finagle._
 import com.twitter.inject.TwitterModule
+import com.twitter.diffy.proxy.ResponseMode._
 import com.twitter.logging.Logger
 import com.twitter.util._
 
@@ -91,7 +92,15 @@ trait DifferenceProxy {
           }
       }
 
-      NoResponseExceptionFuture
+      def pickRawResponse(pos: Int) =
+              rawResponses flatMap { reps => Future.const(reps(pos)) }
+
+            settings.responseMode match {
+              case EmptyResponse => NoResponseExceptionFuture
+              case FromPrimary   => pickRawResponse(0)
+              case FromCandidate => pickRawResponse(1)
+              case FromSecondary => pickRawResponse(2)
+            }
     }
   }
 

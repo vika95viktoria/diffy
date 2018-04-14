@@ -9,11 +9,11 @@ RUN mv target/scala-2.11 /bin/diffy
 
 ENTRYPOINT ["java", "-jar", "/bin/diffy/diffy-server.jar"]
 
-CMD [ "-candidate=localhost:9992", \
-      "-master.primary=localhost:9990", \
-      "-master.secondary=localhost:9991", \
+CMD [ "-candidate=localhost:8089", \
+      "-master.primary=localhost:8082", \
+      "-master.secondary=localhost:8085", \
       "-service.protocol=http", \
-      "-serviceName='Test-Service'", \
+      "-serviceName='sale-channel-mgmt'", \
       "-proxy.port=:8880", \
       "-admin.port=:8881", \
       "-http.port=:8888", \
